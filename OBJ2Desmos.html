@@ -1,0 +1,103 @@
+<html>
+	<head>
+		<title>OBJ2Desmos</title>
+		<script>
+			function convert() {
+				OBJData = document.getElementById("OBJInput").value.split("\n");
+				for (i in OBJData) {
+					OBJData[i] = OBJData[i].split(" ");
+				}
+				verticesX = [];
+				verticesY = [];
+				verticesZ = [];
+				faces0 = [];
+				faces1 = [];
+				faces2 = [];
+				for (i in OBJData) {
+					if (OBJData[i][0] == "v") {
+						verticesX.push(OBJData[i][1]);
+						verticesY.push(OBJData[i][2]);
+						verticesZ.push(OBJData[i][3]);
+					} else if (OBJData[i][0] == "f") {
+						faces0.push(OBJData[i][1]);
+						faces1.push(OBJData[i][2]);
+						faces2.push(OBJData[i][3]);
+					}
+				}
+				xListString = "x_{1}=\\left[";
+				for (i of verticesX) {
+					xListString += i + ",";
+				}
+				xListString = xListString.slice(0, -1) + "\\right]";
+				
+				yListString = "y_{1}=\\left[";
+				for (i of verticesY) {
+					yListString += i + ",";
+				}
+				yListString = yListString.slice(0, -1) + "\\right]";
+				
+				zListString = "z_{1}=\\left[";
+				for (i of verticesZ) {
+					zListString += i + ",";
+				}
+				zListString = zListString.slice(0, -1) + "\\right]";
+				
+				fListString0 = "f_{1}=\\left[";
+				for (i of faces0) {
+					fListString0 += i + ",";
+				}
+				fListString0 = fListString0.slice(0, -1) + "\\right]";
+				
+				fListString1 = "f_{2}=\\left[";
+				for (i of faces1) {
+					fListString1 += i + ",";
+				}
+				fListString1 = fListString1.slice(0, -1) + "\\right]";
+				
+				fListString2 = "f_{3}=\\left[";
+				for (i of faces2) {
+					fListString2 += i + ",";
+				}
+				fListString2 = fListString2.slice(0, -1) + "\\right]";
+				
+				document.getElementById("xList").value = xListString;
+				document.getElementById("xListP").innerHTML = verticesX.length;
+				document.getElementById("yList").value = yListString;
+				document.getElementById("yListP").innerHTML = verticesY.length;
+				document.getElementById("zList").value = zListString;
+				document.getElementById("zListP").innerHTML = verticesZ.length;
+				document.getElementById("fList0").value = fListString0;
+				document.getElementById("fListP0").innerHTML = faces0.length;
+				document.getElementById("fList1").value = fListString1;
+				document.getElementById("fListP1").innerHTML = faces1.length;
+				document.getElementById("fList2").value = fListString2;
+				document.getElementById("fListP2").innerHTML = faces2.length;
+			}
+		</script>
+	</head>
+	<body style="display: flex; justify-content: center; align-items: center;">
+		<div>
+			<textarea id="OBJInput" style="width: 500px; height: 300px;"></textarea>
+		</div>
+		<button onClick="convert()" style="height: 10%; margin: 40px;">Convert to lists</button>
+		<div>
+			<input id="xList" style="display: inline-block;">
+			<p id="xListP" style="display: inline-block;">0</p>
+			<br>
+			<input id="yList" style="display: inline-block;">
+			<p id="yListP" style="display: inline-block;">0</p>
+			<br>
+			<input id="zList" style="display: inline-block;">
+			<p id="zListP" style="display: inline-block;">0</p>
+			<br>
+			<input id="fList0" style="display: inline-block;">
+			<p id="fListP0" style="display: inline-block;">0</p>
+			<br>
+			<input id="fList1" style="display: inline-block;">
+			<p id="fListP1" style="display: inline-block;">0</p>
+			<br>
+			<input id="fList2" style="display: inline-block;">
+			<p id="fListP2" style="display: inline-block;">0</p>
+		</div>
+	</body>
+</html>
