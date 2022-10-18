@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>OBJ2Desmos</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            h2 {
+                color: white;
+                text-shadow: 2px 2px 4px black;
+            }
+
+            body {
+                background-color: gray;
+                margin: 0;
+                padding: 0;
+                width: 100vw;
+                height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .main {
+                width: 80%;
+                height: 80%;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .main > * {
+                flex: 1;
+            }
+
+            .main button {
+                width: 50%;
+                height: 10%;
+                cursor: pointer;
+                font-size: 36px;
+                font-weight: bold;
+            }
+            
+            .main div {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+            }
+
+            .main .input textarea {
+                width: 100%;
+                flex: 1;
+                border: none;
+            }
+
+            .main div > textarea,button {
+                box-shadow: 2px 2px 4px black;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="main">
+            <div class="input">
+                <h2>Paste in OBJ File</h2>
+                <textarea id="objInput"></textarea>
+            </div>
+            <div>
+                <button onclick="convert()">Convert</button>
+            </div>
+            <div class="input">
+                <h2>Desmos List Output</h2>
+                <textarea id="desmosOutput"></textarea>
+            </div>
+        </div>
+        <script>
+            const OBJ = document.getElementById("objInput");
+            const LIST = document.getElementById("desmosOutput");
+            let x = [];
+            let y = [];
+            let z = [];
+            let f1 = [];
+            let f2 = [];
+            let f3 = [];
+            
+            function regexFill(fillArray, regex, str) {
+                let m;
+                while ((m = regex.exec(str)) !== null) {
+                    if (m.index === regex.lastIndex) {
+                        regex.lastIndex++;
+                    }
+                    
+                    fillArray.push(m[1]);
+                }
+            }
+
+            function convert() {
+                let objData = OBJ.value;
+
+                regexFill(x, /^v ([\-\.0-9]+)/gm, objData);
+                regexFill(y, /^v [\-\.0-9]+ ([\-\.0-9]+)/gm, objData);
+                regexFill(z, /^v [\-\.0-9]+ [\-\.0-9]+ ([\-\.0-9]+)/gm, objData);
+                regexFill(f1, /^f ([\-\.0-9]+)/gm, objData);
+                regexFill(f2, /^f [\-\.0-9\/]+ ([\-\.0-9]+)/gm, objData);
+                regexFill(f3, /^f [\-\.0-9\/]+ [\-\.0-9\/]+ ([\-\.0-9]+)/gm, objData);
+
+                if (objData.search(/^f [\-\.0-9\/]+ [\-\.0-9\/]+ [\-\.0-9\/]+ [\-\.0-9]+/m) !== -1) {
+                    alert("It appears one or more faces in your mesh has more than 3 vertices. This will likely cause desmos to render those faces incorrectly. Check the \"Triangulate Faces\" option when exporting in Blender to ensure all faces have three vetices.");
+                }
+
+                let listOutput = "";
+
+                listOutput += `x_{1} = \\left[${x.join(',')}\\right]\n`;
+                listOutput += `y_{1} = \\left[${y.join(',')}\\right]\n`;
+                listOutput += `z_{1} = \\left[${z.join(',')}\\right]\n`;
+                listOutput += `f_{1} = \\left[${f1.join(',')}\\right]\n`;
+                listOutput += `f_{2} = \\left[${f2.join(',')}\\right]\n`;
+                listOutput += `f_{3} = \\left[${f3.join(',')}\\right]\n`;
+
+                LIST.innerHTML = listOutput;
+
+                x = [];
+                y = [];
+                z = [];
+                f1 = [];
+                f2 = [];
+                f3 = [];
+            }
+        </script>
+    </body>
+</html>
