@@ -101,14 +101,14 @@
             function convert() {
                 let objData = OBJ.value;
 
-                regexFill(x, /^v ([\-\.0-9E]+)/gm, objData);
-                regexFill(y, /^v [\-\.0-9E]+ ([\-\.0-9E]+)/gm, objData);
-                regexFill(z, /^v [\-\.0-9E]+ [\-\.0-9E]+ ([\-\.0-9E]+)/gm, objData);
-                regexFill(f1, /^f ([\-\.0-9E]+)/gm, objData);
-                regexFill(f2, /^f [\-\.0-9E\/]+ ([\-\.0-9E]+)/gm, objData);
-                regexFill(f3, /^f [\-\.0-9E\/]+ [\-\.0-9E\/]+ ([\-\.0-9E]+)/gm, objData);
+                regexFill(x, /^v +([\-\.0-9E]+)/gm, objData);
+                regexFill(y, /^v +[\-\.0-9E]+ +([\-\.0-9E]+)/gm, objData);
+                regexFill(z, /^v +[\-\.0-9E]+ +[\-\.0-9E]+ ([\-\.0-9E]+)/gm, objData);
+                regexFill(f1, /^f +([\-\.0-9E]+)/gm, objData);
+                regexFill(f2, /^f +[\-\.0-9E\/]+ +([\-\.0-9E]+)/gm, objData);
+                regexFill(f3, /^f +[\-\.0-9E\/]+ +[\-\.0-9E\/]+ +([\-\.0-9E]+)/gm, objData);
 
-                if (objData.search(/^f [\-\.0-9E\/]+ [\-\.0-9E\/]+ [\-\.0-9E\/]+ [\-\.0-9E]+/m) !== -1) {
+                if (objData.search(/^f +[\-\.0-9E\/]+ +[\-\.0-9E\/]+ +[\-\.0-9E\/]+ +[\-\.0-9E]+/m) !== -1) {
                     alert("It appears one or more faces in your mesh has more than 3 vertices. This will likely cause desmos to render those faces incorrectly. Check the \"Triangulate Faces\" option when exporting in Blender to ensure all faces have three vetices.");
                 }
 
@@ -122,6 +122,7 @@
                 listOutput += `f_{3} = \\left[${f3.join(',')}\\right]\n`;
 
                 LIST.innerHTML = listOutput;
+                LIST.value = listOutput;
 
                 x = [];
                 y = [];
