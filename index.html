@@ -127,6 +127,7 @@
             }
             
             let facesRegex = /^f(.*)/gm;
+            let valueRegex = /[\-\.0-9E]+/;
             function getFaces(str) {
                 let m;
                 while ((m = facesRegex.exec(str)) !== null) {
@@ -135,6 +136,9 @@
                     }
                     
                     let faceList = m[1].trim().split(" ");
+                    for (let i = 0; i < faceList.length; i++) {
+                        faceList[i] = parseFloat(valueRegex.exec(faceList[i])[0]);
+                    }
                     largestFace = Math.max(faceList.length, largestFace);
                     faces.push(faceList)
                 } 
