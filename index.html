@@ -169,7 +169,7 @@
                             listOutput += "\\frac{0}{0}, ";
                         }
                     }
-                    listOutput.splice(0, listOutput.length-1);
+                    listOutput = listOutput.slice(0, listOutput.length-1);
                     listOutput += `\\right]\n`;
                 }
 
