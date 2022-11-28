@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>OBJ2Desmos</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            h2, p {
+                color: white;
+                text-shadow: 2px 2px 4px black;
+            }
+
+            body {
+                background-color: gray;
+                margin: 0;
+                padding: 0;
+                width: 100vw;
+                height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .main {
+                width: 80%;
+                height: 80%;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .main > * {
+                flex: 1;
+            }
+
+            .main button {
+                width: 50%;
+                height: 10%;
+                cursor: pointer;
+                font-size: 36px;
+                font-weight: bold;
+            }
+
+            .ngons_wrapper {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                color: white;
+                font-size: 30px;
+                margin-top: 10px;
+            }
+
+            .ngons_wrapper * {
+                margin: 5px;
+            }
+
+            .ngons_wrapper input {
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+                box-shadow: 2px 2px 4px black;
+            }
+
+            .ngons_wrapper p {
+                user-select: none;
+                cursor: pointer;
+            }
+            
+            .main div {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+            }
+
+            .main .input textarea {
+                width: 100%;
+                flex: 1;
+                border: none;
+            }
+
+            .main div > textarea,button {
+                box-shadow: 2px 2px 4px black;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="main">
+            <div class="input">
+                <h2>Paste in OBJ File</h2>
+                <textarea id="objInput"></textarea>
+            </div>
+            <div>
+                <button onclick="convert()">Convert</button>
+                <span class="ngons_wrapper"><input id="ngonsCheckbox" type="checkbox"><p onclick="NGONS.checked = !NGONS.checked">Non Triangular Faces</p></span>
+            </div>
+            <div class="input">
+                <h2>Desmos List Output</h2>
+                <textarea id="desmosOutput"></textarea>
+            </div>
+        </div>
+        <script>
+            const OBJ = document.getElementById("objInput");
+            const LIST = document.getElementById("desmosOutput");
+            const NGONS = document.getElementById("ngonsCheckbox");
+            let x = [];
+            let y = [];
+            let z = [];
+            let faces = [];
+            let largestFace;
+            
+            function regexFill(fillArray, regex, str) {
+                let m;
+                while ((m = regex.exec(str)) !== null) {
+                    if (m.index === regex.lastIndex) {
+                        regex.lastIndex++;
+                    }
+                    
+                    fillArray.push(parseFloat(m[1]));
+                }
+            }
+            
+            let facesRegex = /^f(.*)/gm;
+            function getFaces(str) {
+                let m;
+                while ((m = facesRegex.exec(str)) !== null) {
+                    if (m.index === facesRegex.lastIndex) {
+                        facesRegex.lastIndex++;
+                    }
+                    
+                    let faceList = m[1].trim().split(" ");
+                    largestFace = Math.max(faceList.length, largestFace);
+                    faces.push(faceList)
+                } 
+            }
+
+            function convert() {
+                let objData = OBJ.value;
+                largestFace = 0;
+
+                regexFill(x, /^v +([\-\.0-9E]+)/gm, objData);
+                regexFill(y, /^v +[\-\.0-9E]+ +([\-\.0-9E]+)/gm, objData);
+                regexFill(z, /^v +[\-\.0-9E]+ +[\-\.0-9E]+ ([\-\.0-9E]+)/gm, objData);
+                getFaces(objData);
+
+                if (!NGONS.checked && objData.search(/^f +[\-\.0-9E\/]+ +[\-\.0-9E\/]+ +[\-\.0-9E\/]+ +[\-\.0-9E]+/m) !== -1) {
+                    alert("It appears one or more faces in your mesh has more than 3 vertices. This will likely cause desmos to render those faces incorrectly. Check the \"Triangulate Faces\" option when exporting in Blender to ensure all faces have three vetices.");
+                }
+
+                let listOutput = "";
+
+                listOutput += `x_{1} = \\left[${x.join(',')}\\right]\n`;
+                listOutput += `y_{1} = \\left[${y.join(',')}\\right]\n`;
+                listOutput += `z_{1} = \\left[${z.join(',')}\\right]\n`;
+
+                let loopCap = (NGONS.checked ? largestFace : 3);
+                for (let i = 0; i < loopCap; i++) {
+                    listOutput += `f_{${i + 1}} = \\left[`;
+                    for (let j = 0; j < faces.length; j++) {
+                        if (i < faces[j].length) {
+                            listOutput += `${faces[j][i]}, `;
+                        } else {
+                            listOutput += "\\frac{0}{0}, ";
+                        }
+                    }
+                    listOutput += `\\right]\n`;
+                }
+
+                LIST.innerHTML = listOutput;
+                LIST.value = listOutput;
+
+                x = [];
+                y = [];
+                z = [];
+                faces = [];
+            }
+        </script>
+    </body>
+</html>
