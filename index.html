@@ -164,9 +164,9 @@
                     listOutput += `f_{${i + 1}} = \\left[`;
                     for (let j = 0; j < faces.length; j++) {
                         if (i < faces[j].length) {
-                            listOutput += `${faces[j][i]}, `;
+                            listOutput += `${faces[j][i]},`;
                         } else {
-                            listOutput += "\\frac{0}{0}, ";
+                            listOutput += "\\frac{0}{0},";
                         }
                     }
                     listOutput = listOutput.slice(0, listOutput.length-1);
