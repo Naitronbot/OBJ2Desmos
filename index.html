@@ -146,7 +146,7 @@
 
             function convert() {
                 let objData = OBJ.value;
-                objData = objData.replace(/\ +/g, "");
+                objData = objData.replace(/\ +/g, " ");
                 largestFace = 0;
 
                 regexFill(x, /^v +([\-\.0-9E]+)/gm, objData);
