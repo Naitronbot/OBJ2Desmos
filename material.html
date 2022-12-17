@@ -170,13 +170,14 @@
             }
 
             let mtlRegex = /usemtl .+/;
+            let facesRegex1 = /^f(.*)/;
             function getMaterials(str) {
                 let lines = str.split("\n");
                 let currentIndex = 0;
                 for (let i = 0; i < lines.length; i++) {
                     if (mtlRegex.test(lines[i])) {
                         currentIndex++;
-                    } else if (facesRegex.test(lines[i])) {
+                    } else if (facesRegex1.test(lines[i])) {
                         c.push(currentIndex);
                     }
                 }
