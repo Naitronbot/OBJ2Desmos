@@ -119,6 +119,8 @@
             let g = [];
             let b = [];
             let c = [];
+            let m1 = [];
+            let m2 = [];
             let faces = [];
             let largestFace;
             
@@ -152,6 +154,7 @@
             }
             
             let colorRegex = /^Kd(.*)/gm;
+            let getMtlRegex = /newmtl (.+)/gm;
             function getDiffuse(str) {
                 let m;
                 while ((m = colorRegex.exec(str)) !== null) {
@@ -166,16 +169,26 @@
                     r.push(colorList[0]);
                     g.push(colorList[1]);
                     b.push(colorList[2]);
+                }
+                
+                m = undefined;
+                while ((m = getMtlRegex.exec(str)) !== null) {
+                    if (m.index === getMtlRegex.lastIndex) {
+                        getMtlRegex.lastIndex++;
+                    }
+                    
+                    m2.push(m[1]);
                 } 
             }
 
-            let mtlRegex = /usemtl .+/;
+            let mtlRegex = /usemtl (.+)/;
             let facesRegex1 = /^f(.*)/;
             function getMaterials(str) {
                 let lines = str.split("\n");
                 let currentIndex = 0;
                 for (let i = 0; i < lines.length; i++) {
                     if (mtlRegex.test(lines[i])) {
+                        m1.push(lines[i].match(mtlRegex)[1]);
                         currentIndex++;
                     } else if (facesRegex1.test(lines[i])) {
                         c.push(currentIndex);
@@ -221,9 +234,22 @@
                     listOutput += `\\right]\n`;
                 }
 
-                listOutput += `r_{1} = \\left[${r.join(',')}\\right]\n`;
-                listOutput += `g_{1} = \\left[${g.join(',')}\\right]\n`;
-                listOutput += `b_{1} = \\left[${b.join(',')}\\right]\n`;
+                let newR = [];
+                let newG = [];
+                let newB = [];
+                for (let i = 0; i < m1.length; i++) {
+                    for (let j = 0; j < m2.length; j++) {
+                        if (m1[i] === m2[j]) {
+                            newR.push(r[j]);
+                            newG.push(g[j]);
+                            newB.push(b[j]);
+                        }
+                    }
+                }
+
+                listOutput += `r_{1} = \\left[${newR.join(',')}\\right]\n`;
+                listOutput += `g_{1} = \\left[${newG.join(',')}\\right]\n`;
+                listOutput += `b_{1} = \\left[${newB.join(',')}\\right]\n`;
                 listOutput += `c_{1} = \\left[${c.join(',')}\\right]\n`;
 
                 LIST.innerHTML = listOutput;
