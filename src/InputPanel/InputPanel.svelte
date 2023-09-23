@@ -27,8 +27,13 @@
             <option value={mode.name}>{mode.name}</option>
         {/each}
     </select>
-    <DataInput name="OBJ"/>
+    {#if selectedMode === "OBJ+MTL" || selectedMode === "OBJ"}
+        <DataInput name="OBJ" filetype="OBJ"/>
+    {/if}
+    {#if selectedMode === "STL"}
+        <DataInput name="STL" filetype="STL"/>
+    {/if}
     {#if selectedMode === "OBJ+MTL"}
-        <DataInput name="MTL"/>
+        <DataInput name="MTL" filetype="MTL"/>
     {/if}
 </div>
