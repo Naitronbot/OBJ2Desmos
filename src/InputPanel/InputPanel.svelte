@@ -1,9 +1,10 @@
 <style src="./InputPanel.css"></style>
 
 <script lang='ts'>
-  import DataInput from "../DataInput/DataInput.svelte";
+    import DataInput from "../DataInput/DataInput.svelte";
 
     let selectedMode: typeof modes[number]['name'] = "OBJ";
+    $: selectedMode, () => modelFile.type = selectedMode;
     const modes = [
         {
             id: 1,
@@ -18,6 +19,8 @@
             name: "STL"
         }
     ] as const;
+    
+    export let modelFile = {type: selectedMode as string, obj: "", mtl: "", stl: ""};
 
 </script>
 
@@ -28,12 +31,12 @@
         {/each}
     </select>
     {#if selectedMode === "OBJ+MTL" || selectedMode === "OBJ"}
-        <DataInput name="OBJ" filetype="OBJ"/>
+        <DataInput name="OBJ" filetype="OBJ" bind:value={modelFile.obj}/>
     {/if}
     {#if selectedMode === "STL"}
-        <DataInput name="STL" filetype="STL"/>
+        <DataInput name="STL" filetype="STL" bind:value={modelFile.stl}/>
     {/if}
     {#if selectedMode === "OBJ+MTL"}
-        <DataInput name="MTL" filetype="MTL"/>
+        <DataInput name="MTL" filetype="MTL" bind:value={modelFile.mtl}/>
     {/if}
 </div>
