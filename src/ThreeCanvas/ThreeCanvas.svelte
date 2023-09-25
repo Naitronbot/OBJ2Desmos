@@ -1,6 +1,14 @@
 <style src="./ThreeCanvas.css"></style>
 
 <script lang='ts'>
+    /* 
+     * SETTINGS TO ADD
+     * Toggle Smooth Shading
+     * Toggle Backface Culling
+     * Toggle Grid
+     * Reset Viewport
+     */
+
     import { onMount } from 'svelte';
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
