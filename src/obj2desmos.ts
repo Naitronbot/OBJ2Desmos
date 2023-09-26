@@ -1,3 +1,5 @@
+import { Earcut } from "three/src/extras/Earcut.js";
+
 class ModelParseError extends Error {};
 
 type Vert = {x: number, y: number, z: number};
@@ -13,20 +15,35 @@ abstract class ModelProcessor {
         this.process(dataString);
     }
 
-    triangulateMesh() {
-        this.meshData = this.triangulate(this.meshData);
-    }
-
-    protected triangulate(meshData: MeshData) {
-        // TODO
-        return meshData;
+    triangulate(mesh?: MeshData) {
+        mesh = mesh ?? this.meshData;
+        let faces = mesh.faces;
+        for (let i = 0; i < faces.length; i++) {
+            if (faces[i].length > 3) {
+                let face = faces.splice(i, 1)[0];
+                let verts = [];
+                for (let j = 0; j < face.length; j++) {
+                    let index = face[j];
+                    index -= index > 0 ? 1 : 0;
+                    let vert = mesh.vertices.at(index);
+                    if (vert === undefined) {
+                        throw new ModelParseError(`Malformed OBJ: Vertex index ${index} does not exist on face ${face}`);
+                    }
+                    verts.push(vert.x, vert.y, vert.z);
+                }
+                let newIndices = Earcut.triangulate(verts, undefined, 3);
+                for (let j = 0; j < newIndices.length; j += 3) {
+                    mesh.faces.push([face[newIndices[j]], face[newIndices[j+1]], face[newIndices[j+2]]]);
+                }
+            } 
+        }
     }
 
     abstract process(dataString: string): void;
 }
 
 export class ObjProcessor extends ModelProcessor {
-    process(data: string): void {
+    process(data: string) {
         let meshData = {faces: [] as number[][], vertices: [] as Vert[]};
         const lines = data.split("\n");
 

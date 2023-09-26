@@ -12,7 +12,7 @@
     import { onMount } from 'svelte';
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-    import type { MeshData } from '../obj2desmos';
+    import { ObjProcessor, type MeshData } from '../obj2desmos';
 
     export let model: MeshData | undefined;
     
@@ -47,6 +47,9 @@
         material?.dispose();
 
         if (!model) return;
+
+        let objparser = new ObjProcessor('');
+        objparser.triangulate(model);
 
         geometry = new THREE.BufferGeometry();
         const vertices = new Float32Array(model.vertices.flatMap(a => Object.values(a)) as []);
