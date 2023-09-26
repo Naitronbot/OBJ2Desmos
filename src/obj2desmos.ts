@@ -35,7 +35,8 @@ abstract class ModelProcessor {
                 for (let j = 0; j < newIndices.length; j += 3) {
                     mesh.faces.push([face[newIndices[j]], face[newIndices[j+1]], face[newIndices[j+2]]]);
                 }
-            } 
+                i--;
+            }
         }
     }
 

@@ -50,6 +50,7 @@
 
         let objparser = new ObjProcessor('');
         objparser.triangulate(model);
+        // console.log(model);
 
         geometry = new THREE.BufferGeometry();
         const vertices = new Float32Array(model.vertices.flatMap(a => Object.values(a)) as []);
