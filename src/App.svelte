@@ -26,5 +26,7 @@
     <div>
         <ProcessPanel bind:model on:convert={convert} />
     </div>
-    <div></div>
+    <div>
+        <OutputPanel bind:model/>
+    </div>
 </main>
