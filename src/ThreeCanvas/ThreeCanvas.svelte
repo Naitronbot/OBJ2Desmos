@@ -12,9 +12,9 @@
     import { onMount } from 'svelte';
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-    import { ObjProcessor, type MeshData } from '../obj2desmos';
+    import type Model from '../OBJ2Desmos/Model';
 
-    export let model: MeshData | undefined;
+    export let model: Model | undefined;
     
     let rootElem: HTMLElement;
     let scene: THREE.Scene;
@@ -48,8 +48,7 @@
 
         if (!model) return;
 
-        let objparser = new ObjProcessor('');
-        objparser.triangulate(model);
+        model.triangulate();
         // console.log(model);
 
         geometry = new THREE.BufferGeometry();

@@ -4,18 +4,14 @@
     import InputPanel from "./InputPanel/InputPanel.svelte";
     import ProcessPanel from "./ProcessPanel/ProcessPanel.svelte";
     import OutputPanel from "./OutputPanel/OutputPanel.svelte";
-    import { ObjProcessor } from "./obj2desmos";
-    import type { MeshData } from "./obj2desmos";
-
-    const objProcess = new ObjProcessor('');
+    import Model from "./OBJ2Desmos/Model";
 
     let modelFile = {type: "OBJ", obj: "", mtl: "", stl: ""};
 
-    let model: MeshData;
+    let model: Model;
 
     function convert() {
-        objProcess.process(modelFile.obj);
-        model = objProcess.meshData;        
+        model = Model.fromObj(modelFile.obj);        
     }
 </script>
 

@@ -3,9 +3,9 @@
 <script lang='ts'>
     import ThreeCanvas from "../ThreeCanvas/ThreeCanvas.svelte";
     import { createEventDispatcher } from "svelte";
-    import type { MeshData } from "../obj2desmos";
+    import Model from "../OBJ2Desmos/Model";
 
-    export let model: MeshData | undefined;
+    export let model: Model | undefined;
 
     const dispatch = createEventDispatcher();
 </script>

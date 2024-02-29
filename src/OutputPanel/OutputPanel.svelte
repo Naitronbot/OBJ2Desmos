@@ -2,20 +2,20 @@
 
 <script lang='ts'>
   import { writable } from "svelte/store";
-    import type { MeshData } from "../obj2desmos";
+  import type Model from "../OBJ2Desmos/Model";
 
-    export let model: MeshData | undefined;
+    export let model: Model | undefined;
     let value = writable("");
     $: model, value.set(toDesmosExpr(model) ?? "");
 
-    function toDesmosExpr(mesh?: MeshData) {
-        if (!mesh) return;
+    function toDesmosExpr(model?: Model) {
+        if (!model) return;
 
         let output = "";
 
-        output += "v_{1} = \\left[" + mesh.vertices.map(vert => vert.x) + "\\right]\n";
-        output += "v_{2} = \\left[" + mesh.vertices.map(vert => vert.y) + "\\right]\n";
-        output += "v_{3} = \\left[" + mesh.vertices.map(vert => vert.z) + "\\right]\n";
+        output += "v_{1} = \\left[" + model.vertices.map(vert => vert.x) + "\\right]\n";
+        output += "v_{2} = \\left[" + model.vertices.map(vert => vert.y) + "\\right]\n";
+        output += "v_{3} = \\left[" + model.vertices.map(vert => vert.z) + "\\right]\n";
 
         return output;
     }
