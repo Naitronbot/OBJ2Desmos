@@ -1,9 +1,9 @@
 <style src="./ProcessPanel.css"></style>
 
 <script lang='ts'>
-    import ThreeCanvas from "../ThreeCanvas/ThreeCanvas.svelte";
     import { createEventDispatcher } from "svelte";
     import Model from "../OBJ2Desmos/Model";
+    import PreviewWindow from "../PreviewWindow/PreviewWindow.svelte";
 
     export let model: Model | undefined;
 
@@ -11,7 +11,7 @@
 </script>
 
 <div class="process-panel">
-    <ThreeCanvas bind:model />
+    <PreviewWindow bind:model />
     <div class="button-wrapper">
         <button on:click={() => dispatch("convert")}>Convert <img src="/src/assets/arrow.svg" alt="Arrow pointing right"></button>
     </div>
