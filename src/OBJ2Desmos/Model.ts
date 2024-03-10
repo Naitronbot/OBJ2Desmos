@@ -34,6 +34,31 @@ export default class Model {
                 i--;
             }
         }
+
+        return this;
+    }
+
+    centerToOrigin() {
+        if (this.vertices.length === 0) return;
+
+        const total = this.vertices.reduce((v1, v2) => ({
+            x: v1.x + v2.x,
+            y: v1.y + v2.y,
+            z: v1.z + v2.z,
+        }));
+        const geometricCenter = {
+            x: total.x / this.vertices.length,
+            y: total.y / this.vertices.length,
+            z: total.z / this.vertices.length,
+        };
+
+        this.vertices = this.vertices.map(v => ({
+            x: v.x - geometricCenter.x,
+            y: v.y - geometricCenter.y,
+            z: v.z - geometricCenter.z,
+        }));
+
+        return this;
     }
 
     static fromObj(data: string) {
