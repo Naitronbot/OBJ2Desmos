@@ -3,21 +3,12 @@
 <script lang='ts'>
     import DataInput from "../DataInput/DataInput.svelte";
 
-    let selectedMode: typeof modes[number]['name'] = "OBJ";
+    let selectedMode: typeof modes[number] = "OBJ";
     $: selectedMode, () => modelFile.type = selectedMode;
     const modes = [
-        {
-            id: 1,
-            name: "OBJ"
-        },
-        {
-            id: 2,
-            name: "OBJ+MTL"
-        },
-        {
-            id: 3,
-            name: "STL"
-        }
+        "OBJ",
+        "OBJ+MTL",
+        "STL",
     ] as const;
     
     export let modelFile = {type: selectedMode as string, obj: "", mtl: "", stl: ""};
@@ -27,7 +18,7 @@
 <div class="inputPanel" style={`grid-template-rows: 50px repeat(${selectedMode === "OBJ+MTL" ? "2" : "1"}, 1fr)`}>
     <select bind:value={selectedMode}>
         {#each modes as mode}
-            <option value={mode.name}>{mode.name}</option>
+            <option value={mode}>{mode}</option>
         {/each}
     </select>
     {#if selectedMode === "OBJ+MTL" || selectedMode === "OBJ"}
